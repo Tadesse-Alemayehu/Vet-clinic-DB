@@ -11,4 +11,5 @@ CREATE TABLE IF NOT EXISTS animals (
     weight_kg DECIMAL
     );
 
+ALTER TABLE animals ADD COLUMN species varchar;
     
