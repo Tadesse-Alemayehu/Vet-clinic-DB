@@ -27,10 +27,16 @@ delete from animals;
 ROLLBACK;
 select * from animals;
 
-Begin TRANSACTION;
+BEGIN TRANSACTION;
 delete from animals where date_of_birth = '2022/1/1';
+select * from animals;
 SAVEPOINT SAVEPOINT_NAME;
-update animal set weight_kg=weight_kg*-1;
+update animals set weight_kg=weight_kg*-1;
+select * from animals;
 ROLLBACK TO SAVEPOINT_NAME;
+select * from animals;
 update animals set weight_kg=weight_kg*-1 where weight_kg<0;
-ROLLBACK TRANSACTION;
+select * from animals;
+COMMIT TRANSACTION;
+
+
