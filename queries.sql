@@ -41,3 +41,12 @@ select * from animals;
 COMMIT TRANSACTION;
 
 /* agregate and groupby queriews */
+
+select count(*) from animals;
+select count(*) from animals where escape_attempts<1;
+select avg(weight_kg) from animals;
+select neutered,sum(escape_attempts) as sum from animals GROUP BY neutered;
+select species,max(weight_kg),min(weight_kg) from animals GROUP BY species;
+select species,avg(escape_attempts) from animals 
+where date_of_birth between '1990/1/1' and '2000/1/1' 
+GROUP BY species;
