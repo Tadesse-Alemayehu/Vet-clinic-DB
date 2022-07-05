@@ -9,6 +9,7 @@ select * from animals where neutered=true;
 select * from animals where name not like 'Gabumon';
 select * from animals where weight_kg BETWEEN 10.4 and 17.3;
 
+/* Transaction queries */
 BEGIN TRANSACTION;
 update animals set species='unspecified';
 select * from animals;
@@ -39,4 +40,4 @@ update animals set weight_kg=weight_kg*-1 where weight_kg<0;
 select * from animals;
 COMMIT TRANSACTION;
 
-
+/* agregate and groupby queriews */
