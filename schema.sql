@@ -13,3 +13,10 @@ CREATE TABLE IF NOT EXISTS animals (
 
 ALTER TABLE animals ADD COLUMN species varchar;
     
+CREATE TABLE owners(
+    id INT GENERATED ALWAYS AS IDENTITY,
+    full_name varchar,
+    age INT,
+    PRIMARY KEY(id)
+    );
+    
