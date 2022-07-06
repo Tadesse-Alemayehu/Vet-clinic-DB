@@ -21,3 +21,7 @@ CREATE TABLE species(
     id INT GENERATED ALWAYS AS IDENTITY,
     name varchar
 );
+
+ALTER TABLE animals 
+ADD CONSTRAINT animal_primary_key 
+PRIMARY KEY(id);

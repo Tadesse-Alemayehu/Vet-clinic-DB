@@ -18,7 +18,7 @@ select * from animals;
 
 BEGIN TRANSACTION;
 update animals set species='digimon' where name like '%mon';
-update animals set species='pokemon' where species='';
+update animals set species='pokemon' where species=NULL;
 select * from animals;
 COMMIT TRANSACTION;
 select * from animals;
