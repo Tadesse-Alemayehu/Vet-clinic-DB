@@ -47,3 +47,4 @@ ALTER TABLE animals ADD COLUMN owner_id INT;
 ALTER TABLE animals ADD CONSTRAINT owner_forign_key 
 FOREIGN KEY(owner_id) REFERENCES owners(id);
 
+/* Vet clinic database: add "join table" for visits */
