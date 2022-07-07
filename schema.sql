@@ -69,9 +69,11 @@ CREATE TABLE specialties(
 );
 
 /* many-to-many relationship between the tables animals and vets */
+DROP table if EXISTS visits;
 CREATE TABLE visits(
     animal INT,
     vet INT,
+    visit_date date,
     CONSTRAINT animal_visit_FK
     FOREIGN KEY(animal) REFERENCES animals(id),
     CONSTRAINT vet_visited_FK 
