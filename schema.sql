@@ -54,11 +54,10 @@ CREATE TABLE vets(
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
     name varchar,
     age INT,
-    date_of_graduation DATE);
+    date_of_graduation DATE
+);
 
 /* many-to-many relationship between the tables species and vets */
-alter table species ADD CONSTRAINT species_PKE PRIMARY KEY(id);
-
 DROP table if EXISTS specialties;
 CREATE TABLE specialties(
     vet INT,
@@ -67,4 +66,14 @@ CREATE TABLE specialties(
     FOREIGN KEY(vet) REFERENCES vets(id),
     CONSTRAINT species_specialized_vets
     FOREIGN KEY(species) REFERENCES species(id)
+);
+
+/* many-to-many relationship between the tables animals and vets */
+CREATE TABLE visits(
+    animal INT,
+    vet INT,
+    CONSTRAINT animal_visit_FK
+    FOREIGN KEY(animal) REFERENCES animals(id),
+    CONSTRAINT vet_visited_FK 
+    FOREIGN KEY(vet) REFERENCES vets(id)
 );
