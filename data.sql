@@ -74,4 +74,28 @@ SET owner_id = 5
 WHERE name IN ('Angemon','Boarmon');
 
 
+/* Vet clinic database: add "join table" for visits */
+
+/* Insert the following data for vets*/
+INSERT INTO vets(name,age,date_of_graduation) 
+VALUES 
+  ('William Tatcher',45,'2000/4/23'),
+  ('Maisy Smith',26,'2019/4/23'),
+  ('Stephanie Mendez',64,'1981/4/23'),
+  ('Jack Harkness',38,'2008/4/23');
+
+/* Insert the following data for specialties: */
+select id,name from vets where name like 'William Tatcher';
+SELECT species.id from species where species.name='Pokemon';
+INSERT INTO specialties(vet,species)
+values
+((select vets.id from vets where name like 'William Tatcher'),
+(SELECT species.id from species where species.name='Pokemon')),
+((select vets.id from vets where name like 'Stephanie Mendez'),
+(SELECT species.id from species where species.name='Digimon')),
+((select vets.id from vets where name like 'Jack Harkness'),
+(SELECT species.id from species where species.name='Digimon'));
+
+/* Insert the following data for visits */
+
 
