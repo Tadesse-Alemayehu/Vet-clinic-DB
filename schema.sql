@@ -57,7 +57,9 @@ CREATE TABLE vets(
     date_of_graduation DATE);
 
 /* many-to-many relationship between the tables species and vets */
+alter table species ADD CONSTRAINT species_PKE PRIMARY KEY(id);
 
+DROP table if EXISTS specialties;
 CREATE TABLE specialties(
     vet INT,
     species INT,
