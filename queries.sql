@@ -93,3 +93,13 @@ select owners.full_name as full_name,count(*) as count from animals
 join owners on animals.owner_id=owners.id
 group by owners.full_name
 order by count DESC;
+
+
+/* Vet clinic database: add "join table" for visits */
+
+/* Who was the last animal seen by William Tatcher? */
+SELECT animals.name,vets.name, visits.visit_date FROM animals
+JOIN visits on visits.animal=animals.id
+JOIN vets on vets.id=visits.vet
+where vets.name like 'William Tatcher'
+ORDER BY visits.visit_date DESC LIMIT 1;
