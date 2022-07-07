@@ -91,8 +91,10 @@ VALUES
 (SELECT species.id from species where species.name='Pokemon')),
 ((select vets.id from vets where name like 'Stephanie Mendez'),
 (SELECT species.id from species where species.name='Digimon')),
+((select vets.id from vets where name like 'Stephanie Mendez'),
+(SELECT species.id from species where species.name='Digimon')),
 ((select vets.id from vets where name like 'Jack Harkness'),
-(SELECT species.id from species where species.name='Digimon'));
+(SELECT species.id from species where species.name='Pokemon'));
 
 /* Insert the following data for visits */
 INSERT INTO visits(animal,vet,visit_date)
