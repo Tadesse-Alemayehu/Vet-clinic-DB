@@ -120,7 +120,7 @@ VALUES
 ((SELECT animals.id FROM animals WHERE animals.name like 'Plantmon'),
 (SELECT vets.id FROM vets WHERE vets.name like 'William Tatcher'),'2020/8/10'),
 ((SELECT animals.id FROM animals WHERE animals.name like 'Plantmon'),
-(SELECT vets.id FROM vets WHERE vets.name like 'Maisy Smith'),'2021/5/7'),
+(SELECT vets.id FROM vets WHERE vets.name like 'Maisy Smith'),'2021/4/7'),
 ((SELECT animals.id FROM animals WHERE animals.name like 'Squirtle'),
 (SELECT vets.id FROM vets WHERE vets.name like 'Stephanie Mendez'),'2019/4/29'),
 ((SELECT animals.id FROM animals WHERE animals.name like 'Angemon'),
