@@ -49,8 +49,20 @@ FOREIGN KEY(owner_id) REFERENCES owners(id);
 
 /* Vet clinic database: add "join table" for visits */
 
+/* Create a table named vets */
 CREATE TABLE vets(
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
     name varchar,
     age INT,
     date_of_graduation DATE);
+
+/* many-to-many relationship between the tables species and vets */
+
+CREATE TABLE specialties(
+    vet INT,
+    species INT,
+    CONSTRAINT vet_specializes_in
+    FOREIGN KEY(vet) REFERENCES vets(id),
+    CONSTRAINT species_specialized_vets
+    FOREIGN KEY(species) REFERENCES species(id)
+);
