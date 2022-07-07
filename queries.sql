@@ -119,7 +119,7 @@ LEFT JOIN specialties ON vets.id=specialties.vet
 LEFT JOIN species ON species.id=specialties.species
 
 /* List all animals that visited Stephanie Mendez between April 1st and August 30th, 2020. */
-SELECT * FROM animals
+SELECT animals.name,visits.visit_date FROM animals
 JOIN visits ON animals.id=visits.animal
 JOIN vets ON visits.vet=vets.id
 where vets.name like 'Stephanie Mendez'
