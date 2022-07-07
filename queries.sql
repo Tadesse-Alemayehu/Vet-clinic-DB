@@ -149,7 +149,7 @@ JOIN vets ON visits.vet=vets.id
 ORDER BY visits.visit_date DESC LIMIT 1;
 
 /* How many visits were with a vet that did not specialize in that animal's species? */
-select animals.name,animals.species_id,vets.name,specialties.species from animals
+select count(*) from animals
 Join visits on animals.id=visits.animal
 JOIN vets ON visits.vet=vets.id 
 JOIN specialties ON vets.id=specialties.vet
