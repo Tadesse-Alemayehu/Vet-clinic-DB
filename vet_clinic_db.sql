@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.3
--- Dumped by pg_dump version 14.3
+-- Dumped from database version 14.4 (Ubuntu 14.4-0ubuntu0.22.04.1)
+-- Dumped by pg_dump version 14.4 (Ubuntu 14.4-0ubuntu0.22.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -26,7 +26,7 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.animals (
     id integer NOT NULL,
-    name character varying,
+    name character varying(20),
     date_of_birth date,
     escape_attempts integer,
     neutered boolean,
@@ -58,8 +58,9 @@ ALTER TABLE public.animals ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 CREATE TABLE public.owners (
     id integer NOT NULL,
-    full_name character varying,
-    age integer
+    full_name character varying(20),
+    age integer,
+    email character varying(120)
 );
 
 
@@ -80,16 +81,31 @@ ALTER TABLE public.owners ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
--- Name: specialties; Type: TABLE; Schema: public; Owner: postgres
+-- Name: specializations; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.specialties (
-    vet integer,
-    species integer
+CREATE TABLE public.specializations (
+    id integer NOT NULL,
+    species_id integer,
+    vet_id integer
 );
 
 
-ALTER TABLE public.specialties OWNER TO postgres;
+ALTER TABLE public.specializations OWNER TO postgres;
+
+--
+-- Name: specializations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.specializations ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.specializations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
 
 --
 -- Name: species; Type: TABLE; Schema: public; Owner: postgres
@@ -97,7 +113,7 @@ ALTER TABLE public.specialties OWNER TO postgres;
 
 CREATE TABLE public.species (
     id integer NOT NULL,
-    name character varying
+    name character varying(20)
 );
 
 
@@ -123,7 +139,7 @@ ALTER TABLE public.species ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 CREATE TABLE public.vets (
     id integer NOT NULL,
-    name character varying,
+    name character varying(20),
     age integer,
     date_of_graduation date
 );
@@ -150,30 +166,34 @@ ALTER TABLE public.vets ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 --
 
 CREATE TABLE public.visits (
-    animal integer,
-    vet integer,
-    visit_date date
+    id integer NOT NULL,
+    animal_id integer,
+    vet_id integer,
+    date_of_visit date
 );
 
 
 ALTER TABLE public.visits OWNER TO postgres;
 
 --
+-- Name: visits_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.visits ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.visits_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Data for Name: animals; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.animals (id, name, date_of_birth, escape_attempts, neutered, weight_kg, species_id, owner_id) FROM stdin;
-8	Agumon	2020-02-03	0	t	10.23	2	1
-9	Gabumon	2018-11-15	2	t	8	2	2
-11	Devimon	2017-05-12	5	t	11	2	3
-2	Plantmon	20201-11-15	2	t	-5.7	2	3
-4	Angemon	2005-06-12	5	t	-45	2	5
-5	Boarmon	2005-06-07	2	t	20.4	2	5
-7	Ditto	2022-05-14	5	t	22	1	\N
-10	Pikachu	2021-01-07	1	f	15.04	1	2
-1	Charmander	2020-02-08	0	f	-11	1	4
-3	Squirtle	1993-04-02	1	f	-12.13	1	4
-6	Blossom	1998-10-13	1	t	17	1	4
 \.
 
 
@@ -181,25 +201,15 @@ COPY public.animals (id, name, date_of_birth, escape_attempts, neutered, weight_
 -- Data for Name: owners; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.owners (id, full_name, age) FROM stdin;
-1	Sam Smith	34
-2	Jennifer Orwell	19
-3	Bob 	45
-4	Melody Pond	44
-5	Dean Winchester	14
-6	Jodie Whittaker	38
+COPY public.owners (id, full_name, age, email) FROM stdin;
 \.
 
 
 --
--- Data for Name: specialties; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: specializations; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.specialties (vet, species) FROM stdin;
-1	1
-3	2
-3	2
-4	1
+COPY public.specializations (id, species_id, vet_id) FROM stdin;
 \.
 
 
@@ -208,8 +218,6 @@ COPY public.specialties (vet, species) FROM stdin;
 --
 
 COPY public.species (id, name) FROM stdin;
-1	Pokemon
-2	Digimon
 \.
 
 
@@ -218,10 +226,10 @@ COPY public.species (id, name) FROM stdin;
 --
 
 COPY public.vets (id, name, age, date_of_graduation) FROM stdin;
-1	William Tatcher	45	2000-04-23
-2	Maisy Smith	26	2019-04-23
-3	Stephanie Mendez	64	1981-04-23
-4	Jack Harkness	38	2008-04-23
+1	William Tatcher	\N	\N
+2	Maisy Smith	\N	\N
+3	Stephanie Mendez	\N	\N
+4	Jack Harkness	\N	\N
 \.
 
 
@@ -229,27 +237,7 @@ COPY public.vets (id, name, age, date_of_graduation) FROM stdin;
 -- Data for Name: visits; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.visits (animal, vet, visit_date) FROM stdin;
-8	1	2020-05-24
-8	3	2020-06-22
-9	4	2021-02-02
-10	2	2020-01-05
-10	2	2020-03-08
-10	2	2020-05-14
-11	3	2021-05-04
-1	4	2021-02-24
-2	2	2019-12-21
-2	1	2020-08-10
-2	2	2021-04-07
-3	3	2019-04-29
-4	4	2020-10-03
-4	4	2020-11-04
-5	2	2019-01-02
-5	2	2019-05-15
-5	2	2020-02-27
-5	2	2020-08-03
-6	3	2020-05-24
-6	1	2021-01-11
+COPY public.visits (id, animal_id, vet_id, date_of_visit) FROM stdin;
 \.
 
 
@@ -257,21 +245,28 @@ COPY public.visits (animal, vet, visit_date) FROM stdin;
 -- Name: animals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.animals_id_seq', 11, true);
+SELECT pg_catalog.setval('public.animals_id_seq', 10, true);
 
 
 --
 -- Name: owners_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.owners_id_seq', 6, true);
+SELECT pg_catalog.setval('public.owners_id_seq', 2500000, true);
+
+
+--
+-- Name: specializations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.specializations_id_seq', 1, false);
 
 
 --
 -- Name: species_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.species_id_seq', 2, true);
+SELECT pg_catalog.setval('public.species_id_seq', 1, false);
 
 
 --
@@ -282,11 +277,18 @@ SELECT pg_catalog.setval('public.vets_id_seq', 4, true);
 
 
 --
--- Name: animals animal_primary_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: visits_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.visits_id_seq', 10782840, true);
+
+
+--
+-- Name: animals animals_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.animals
-    ADD CONSTRAINT animal_primary_key PRIMARY KEY (id);
+    ADD CONSTRAINT animals_pkey PRIMARY KEY (id);
 
 
 --
@@ -295,6 +297,14 @@ ALTER TABLE ONLY public.animals
 
 ALTER TABLE ONLY public.owners
     ADD CONSTRAINT owners_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: specializations specializations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.specializations
+    ADD CONSTRAINT specializations_pkey PRIMARY KEY (id);
 
 
 --
@@ -314,51 +324,80 @@ ALTER TABLE ONLY public.vets
 
 
 --
--- Name: visits animal_visit_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: visits visits_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.visits
-    ADD CONSTRAINT animal_visit_fk FOREIGN KEY (animal) REFERENCES public.animals(id);
+    ADD CONSTRAINT visits_pkey PRIMARY KEY (id);
 
 
 --
--- Name: animals owner_forign_key; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: animal_visit_count; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX animal_visit_count ON public.visits USING btree (animal_id);
+
+
+--
+-- Name: owner_email_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX owner_email_index ON public.owners USING btree (email);
+
+
+--
+-- Name: visits_vet_id_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX visits_vet_id_index ON public.visits USING btree (vet_id);
+
+
+--
+-- Name: animals animals_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.animals
-    ADD CONSTRAINT owner_forign_key FOREIGN KEY (owner_id) REFERENCES public.owners(id);
+    ADD CONSTRAINT animals_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.owners(id);
 
 
 --
--- Name: animals species_foregn_key; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: animals animals_species_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.animals
-    ADD CONSTRAINT species_foregn_key FOREIGN KEY (species_id) REFERENCES public.species(id);
+    ADD CONSTRAINT animals_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id);
 
 
 --
--- Name: specialties species_specialized_vets; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: specializations specializations_species_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.specialties
-    ADD CONSTRAINT species_specialized_vets FOREIGN KEY (species) REFERENCES public.species(id);
-
-
---
--- Name: specialties vet_specializes_in; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.specialties
-    ADD CONSTRAINT vet_specializes_in FOREIGN KEY (vet) REFERENCES public.vets(id);
+ALTER TABLE ONLY public.specializations
+    ADD CONSTRAINT specializations_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id);
 
 
 --
--- Name: visits vet_visited_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: specializations specializations_vet_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.specializations
+    ADD CONSTRAINT specializations_vet_id_fkey FOREIGN KEY (vet_id) REFERENCES public.vets(id);
+
+
+--
+-- Name: visits visits_animal_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.visits
-    ADD CONSTRAINT vet_visited_fk FOREIGN KEY (vet) REFERENCES public.vets(id);
+    ADD CONSTRAINT visits_animal_id_fkey FOREIGN KEY (animal_id) REFERENCES public.animals(id);
+
+
+--
+-- Name: visits visits_vet_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.visits
+    ADD CONSTRAINT visits_vet_id_fkey FOREIGN KEY (vet_id) REFERENCES public.vets(id);
 
 
 --
