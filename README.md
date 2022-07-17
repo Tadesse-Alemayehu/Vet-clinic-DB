@@ -32,7 +32,6 @@ $ git clone https://github.com/Tadesse-Alemayehu/Vet-clinic-DB
 - Twitter: [@TadesseWebDev](https://twitter.com/TadesseWebDev)
 - LinkedIn: [Tadesse Alemayehu](https://www.linkedin.com/in/tadesse-alemayehu-60141a221/)
 
-
 👤 **Mar Bautista**
 
 - GitHub: [@marilirulita](https://github.com/marilirulita)
